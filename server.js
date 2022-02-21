@@ -27,7 +27,8 @@ cloudinary.config({
     api_secret: 'wTE_uwqm4GoiE9b89kAohKkwJiY',
     secure: true
 });
-const upload = multer();
+
+const upload = multer(); 
 
 
 const HTTP_PORT = process.env.PORT || 3000;
