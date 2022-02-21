@@ -6,7 +6,7 @@
 * 
 *  Name: Yao Yuan Tang       Student ID: 146454202     Date: 2/21
 *
-*  Heroku App URL: https://mighty-bastion-45000.herokuapp.com/about
+*  Heroku App URL: https://mighty-bastion-45000.herokuapp.com/
 * 
 *  GitHub Repository URL: https://github.com/ytang903/web322-app.git
 *
