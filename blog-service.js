@@ -24,17 +24,14 @@ module.exports.initialize = function(){
 
 module.exports.getAllPosts = function(){
     return new Promise(function(resolve, reject){
-        for (var i = 0; i < posts.lenght; i++){
-            posts.push(posts[i]);
-        }
-        if(posts.lenght == 0){
+        if(posts.length == 0){
             reject("no results returned")
         }
         resolve(posts);
     });
 }
 
-  module.exports.getPublishedPosts = function(){
+module.exports.getPublishedPosts = function(){
     var post = [];
     return new Promise(function(resolve, reject){
         for(i = 0; i < posts.length; i++){
@@ -42,7 +39,7 @@ module.exports.getAllPosts = function(){
                 post.push(posts[i])
             };
         }
-        if(post.lenght == 0){
+        if(post.length == 0){
             reject("no results returned")
         }
         resolve(post);
@@ -51,18 +48,66 @@ module.exports.getAllPosts = function(){
 
 module.exports.getCategories = function(){
     return new Promise(function(resolve, reject){
-        if(categories.lenght == 0){
+        if(categories.length == 0){
             reject("no results returned")
         } 
         else
         {
-            for (var i = 0; i < categories.lenght; i++){
-                categories.push(categories[i]);
-        }
         resolve(categories);
         }
     });
 }
 
+module.exports.addPost = function(postData){
+    return new Promise(function (resolve, reject){
+        if (postData.published == undefined){
+            postData.published == false;
+        }
+        else{
+            postData.published == true;
+        }
+        postData.id = posts.length + 1;
+        posts.push(postData);
+        resolve(postData);
+    })
+}
 
+module.exports.getPostsByCategory = function(category){
+    var post = [];
+    return new Promise(function(resolve, reject){
+        for(var i=0; i<posts.length; i++){
+            if(posts[i].category == category)
+            post.push(posts[i]);
+        }  
+        
+         if(post.length == 0)
+                reject("no results returned");
+        resolve(post);
+    });
+}
+
+module.exports.getPostsByMinDate = function(minDateStr){
+    var post = [];
+    return new Promise(function(resolve, reject){
+        for(var i=0; i<posts.length; i++){
+            if(new Date(posts[i].postDate) >= new Date(minDateStr)){
+                post.push(posts[i]);
+            }
+        }  
+        
+        if(post.length == 0)
+            reject("no results returned");
+        resolve(post);
+    });
+}
+
+module.exports.getPostById = function(id){
+    var post;
+    return new Promise((resolve, reject)=>{
+            post = posts.filter(element=>{return element.id==id});
+            if(post.length ==0)
+                reject("no result returned!");
+            resolve(post);
+    });
+}
             
