@@ -147,31 +147,6 @@ app.get('/blog', async (req, res) => {
 });
 
 
-app.get("/posts", function(req, res){
-    if(req.query.category){
-        blog_service.getPostsByCategory(req.query.category).then(function(data){
-            res.render("posts", {posts: data});
-        }).catch(function(err){
-            res.render("posts", {message: "no results"});
-        })
-    }
-    else if(req.query.minDateStr){
-        blog_service.getPostsByMinDate(req.query.minDateStr).then(function(data){
-            res.render("posts", {posts: data});
-        }).catch(function (err) {
-            res.render("posts", {message: "no results"});
-        });
-    }
-    else{
-    blog_service.getAllPosts().then(function(data){
-        res.render("posts", {posts: data});
-    }).catch(function(err){
-        res.render("posts", {message: "no results"});
-    });
-}
-});
-
-
 app.get('/blog/:id', async (req, res) => {
 
     // Declare an object to store properties for the view
@@ -222,6 +197,30 @@ app.get('/blog/:id', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
+
+app.get("/posts", function(req, res){
+    if(req.query.category){
+        blog_service.getPostsByCategory(req.query.category).then(function(data){
+            res.render("posts", {posts: data});
+        }).catch(function(err){
+            res.render("posts", {message: "no results"});
+        })
+    }
+    else if(req.query.minDateStr){
+        blog_service.getPostsByMinDate(req.query.minDateStr).then(function(data){
+            res.render("posts", {posts: data});
+        }).catch(function (err) {
+            res.render("posts", {message: "no results"});
+        });
+    }
+    else{
+    blog_service.getAllPosts().then(function(data){
+        res.render("posts", {posts: data});
+    }).catch(function(err){
+        res.render("posts", {message: "no results"});
+    });
+}
+});
 
 app.get("/categories", function(req, res){
         blog_service.getCategories().then(function(data){

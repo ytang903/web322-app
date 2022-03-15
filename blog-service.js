@@ -51,7 +51,7 @@ module.exports.getPublishedPostsByCategory = function(category){
     var post = [];
     return new Promise(function(resolve, reject){
         for(i = 0; i < posts.length; i++){
-            if(posts[i].published == true && post.category == category){
+            if(posts[i].published == true && posts[i].category == category){
                 post.push(posts[i])
             };
         }
