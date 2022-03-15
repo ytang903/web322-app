@@ -2,6 +2,7 @@ var fs = require("fs");
 var posts = [];
 var categories = [];
 
+
 module.exports.initialize = function(){
     return new Promise(function(resolve, reject){
         try{
@@ -46,6 +47,23 @@ module.exports.getPublishedPosts = function(){
     });
 }
 
+module.exports.getPublishedPostsByCategory = function(category){
+    var post = [];
+    return new Promise(function(resolve, reject){
+        for(i = 0; i < posts.length; i++){
+            if(posts[i].published == true && post.category == category){
+                post.push(posts[i])
+            };
+        }
+        if(post.length == 0){
+            reject("no results returned")
+        }
+        resolve(post);
+    });
+}
+
+
+
 module.exports.getCategories = function(){
     return new Promise(function(resolve, reject){
         if(categories.length == 0){
@@ -67,7 +85,7 @@ module.exports.addPost = function(postData){
             postData.published == true;
         }
         postData.id = posts.length + 1;
-        posts.push(postData);
+        posts.push(postData.postDate);
         resolve(postData);
     })
 }
