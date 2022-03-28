@@ -15,9 +15,9 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const blog_service = require("./blog-service");
+const blogData = require("./blog-service");
 const stripJs = require('strip-js');
-blogData = require("./blog-service");
+
 
 
 const exphbs = require('express-handlebars');
@@ -70,6 +70,9 @@ app.engine('.hbs', exphbs.engine({
             } else {
                 return options.fn(this);
             }
+        },
+        safeHTML: function(context){
+            return stripJs(context);
         }        
     }
 }));
@@ -80,7 +83,7 @@ function onHttpStart() {
     console.log("Express http server listening on: " + HTTP_PORT);
     return new Promise(function(req, res){
 
-        blog_service.initialize().then(function(data) {
+        blogData.initialize().then(function(data) {
             console.log(data)
         }).catch(function(err) {
             console.log(err);
@@ -197,44 +200,39 @@ app.get('/blog/:id', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
+app.get('/posts', (req, res) => {
 
-app.get("/posts", function(req, res){
-    if(req.query.category){
-        blog_service.getPostsByCategory(req.query.category).then(function(data){
-            res.render("posts", {posts: data});
-        }).catch(function(err){
-            res.render("posts", {message: "no results"});
-        })
+    let queryPromise = null;
+
+    if (req.query.category) {
+        queryPromise = blogData.getPostsByCategory(req.query.category);
+    } else if (req.query.minDate) {
+        queryPromise = blogData.getPostsByMinDate(req.query.minDate);
+    } else {
+        queryPromise = blogData.getAllPosts()
     }
-    else if(req.query.minDateStr){
-        blog_service.getPostsByMinDate(req.query.minDateStr).then(function(data){
-            res.render("posts", {posts: data});
-        }).catch(function (err) {
-            res.render("posts", {message: "no results"});
-        });
-    }
-    else{
-    blog_service.getAllPosts().then(function(data){
+
+    queryPromise.then(data => {
         res.render("posts", {posts: data});
-    }).catch(function(err){
+    }).catch(err => {
         res.render("posts", {message: "no results"});
-    });
-}
+    })
+
 });
 
 app.get("/categories", function(req, res){
-        blog_service.getCategories().then(function(data){
+    blogData.getCategories().then(function(data){
             res.render("categories", {categories: data});
         }).catch(function(err){
             res.render("categories", {message: "no results"});
         });
 })
 
-app.get("/post/:id", (req, res) => {
-    blog_service.getPostById(req.params.id).then(function (data) {
-      res.json(data);
-    }).catch(function (err) {
-      res.json({ message: err });
+app.get('/post/:id', (req,res)=>{
+    blogData.getPostById(req.params.id).then(data=>{
+        res.json(data);
+    }).catch(err=>{
+        res.json({message: err});
     });
 });
 
@@ -269,7 +267,7 @@ app.post("/posts/add", upload.single("featureImage"), function(req, res){
         req.body.featureImage = uploaded.url;
         
         // TODO: Process the req.body and add it as a new Blog Post before redirecting to /posts
-        blog_service.addPost(req.body).then((postData) => {
+        blogData.addPost(req.body).then((postData) => {
             res.redirect('/posts')
         })
     });
