@@ -252,7 +252,7 @@ app.get('/post/:id', (req,res)=>{
 
 
 app.get("/posts/add", function(req,res){
-    blogData.getCategories.then(function(data){
+    blogData.getCategories().then(function(data){
         res.render("addPost", {categories: data});
     }).catch(function () {
         res.render("addPost", {categories: []})

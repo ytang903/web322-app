@@ -43,7 +43,7 @@ module.exports.Initialize = function () {
 module.exports.getAllPosts = function(){
     return new Promise((resolve,reject)=>{
         Post.findAll({
-            attributes: ["id"]
+            order: ['id']
         }).then((data)=>{
             resolve(data);
         }).catch((err)=>{
@@ -85,7 +85,7 @@ module.exports.getPublishedPostsByCategory = function(category){
 module.exports.getCategories = function(){
     return new Promise(function(resolve, reject){
         Category.findAll({
-            attributes: ["category"]
+            order: ['id']
         }).then((data)=>{
             resolve(data);
         }).catch((err)=>{
