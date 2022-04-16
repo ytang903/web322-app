@@ -1,12 +1,9 @@
 <div class="row">
     <div class="col-md-12">
+        <h2>Posts <a href="/posts/add" class="btn btn-success pull-right">Add Post</a></h2>
+        <hr />
 
-    
-          <h2>Posts  <a href="/posts/add" class="btn btn-success pull-right">Add Post</a></h2> 
-         
-          <hr />
-          
-          <div class="table-responsive">
+        <div class="table-responsive">
             <table class="table ">
                 <thead>
                     <tr>
@@ -15,6 +12,7 @@
                         <th>Post&nbsp;Date</th>
                         <th>Category</th>
                         <th>Published</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,23 +20,21 @@
                     <tr>
                         <td>{{id}}</td>
                         <td>{{title}}</td>
-                        <td>{{postDate}}</td>
+                        <td>{{#formatDate postDate}}{{/formatDate}}</td>
                         <td><a href="/posts?category={{category}}">{{category}}</a></td>
                         <td>{{published}}</td>
-                        <td><a class="btn btn-danger" href="/post/delete/{{id}}">remove</a></td>
+                        <td><a class="btn btn-danger" href="/posts/delete/{{id}}">remove</a></td>
                     </tr>
-                    
                     {{/each}}
-
                 </tbody>
             </table>
         </div>
-
-        {{#unless posts}}
-        <div class="col-md-12 text-center">
-            <strong>{{message}}</strong>
-        </div>
-        {{/unless}}
     </div>
-</div>
+    {{#unless posts}}
+    <div class="col-md-12 text-center">
+        <strong>{{message}}</strong>
+    </div>
+    {{/unless}}
 
+</div>
+</div>
